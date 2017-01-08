@@ -3,22 +3,19 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
-    entry: {
-        app: './src/main.js',
-        vendor: ["jquery", "bootstrap", "axios", "vue"]
-    },
+    entry: './src/main.js',
     output: {
-    path: path.resolve(__dirname, './dist'),
+    path: './dist',
     filename: 'bundle.js'
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' })
+        new ExtractTextPlugin({ filename: './dist/bundle.css', allChunks: true })
     ], 
-    module: {
+    module: {  
         loaders: [
-            { test: /\.css$/, loader: ExtractTextPlugin.extract({ loader: "css-loader" }) }
-        ],    
-        rules: [
+            { test: /\.scss$/, loaders: ["style", "css", "sass"] }
+        ],
+        rules: [            
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
@@ -44,14 +41,9 @@ module.exports = {
                 options: {
                     name: '[name].[ext]?[hash]'
                 }
-            },
-            {
-            test: /\.css$/,
-            exclude: /node_modules/,
-            loader: 'css-loader'
-            }            
+            }           
         ]
-    },     
+    },      
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.common.js'
@@ -64,29 +56,26 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map',
-    plugins: [
-        new ExtractTextPlugin({ filename: 'bundle.css', disable: false, allChunks: false })
-    ]    
+    devtool: '#eval-source-map'     
 }
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map'
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-        'process.env': {
-        NODE_ENV: '"production"'
-        }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-        sourceMap: true,
-        compress: {
-        warnings: false
-        }
-    }),
-    new webpack.LoaderOptionsPlugin({
-        minimize: true
-    })
+        new webpack.DefinePlugin({
+            'process.env': {
+            NODE_ENV: '"production"'
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
+            compress: {
+            warnings: false
+            }
+        }),
+        new webpack.LoaderOptionsPlugin({
+            minimize: true
+        })
     ])
 }
