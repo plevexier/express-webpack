@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
     entry: {
@@ -11,10 +12,12 @@ module.exports = {
     filename: 'bundle.js'
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
-        
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' })
     ], 
     module: {
+        loaders: [
+            { test: /\.css$/, loader: ExtractTextPlugin.extract({ loader: "css-loader" }) }
+        ],    
         rules: [
             {
                 test: /\.vue$/,
@@ -41,9 +44,14 @@ module.exports = {
                 options: {
                     name: '[name].[ext]?[hash]'
                 }
-            }
+            },
+            {
+            test: /\.css$/,
+            exclude: /node_modules/,
+            loader: 'css-loader'
+            }            
         ]
-    },
+    },     
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.common.js'
@@ -56,7 +64,10 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map'
+    devtool: '#eval-source-map',
+    plugins: [
+        new ExtractTextPlugin({ filename: 'bundle.css', disable: false, allChunks: false })
+    ]    
 }
 
 if (process.env.NODE_ENV === 'production') {
