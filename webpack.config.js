@@ -11,7 +11,8 @@ module.exports = {
     filename: 'bundle.js'
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' })
+        new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js' }),
+        
     ], 
     module: {
         rules: [
