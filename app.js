@@ -37,7 +37,14 @@ if(!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 
 	app.use(webpackMiddleware(compiler,  {
 		path: "/",
-		stats: {colors: true}
+		publicPath: "/dist/",
+		stats: {colors: true},
+		lazy: false,
+		quiet: false,
+		watchOptions: {
+        	aggregateTimeout: 300,
+        	poll: true
+    	}
 	}));
 
 	app.use(webpackHotMiddleware(compiler, {
