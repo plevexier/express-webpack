@@ -36,7 +36,7 @@ if(!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 	var compiler = webpack(webpackConfig)
 
 	app.use(webpackMiddleware(compiler,  {
-		publicPath: webpackConfig.output.publicPath,
+		path: "/",
 		stats: {colors: true}
 	}));
 
