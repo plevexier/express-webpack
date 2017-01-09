@@ -10,7 +10,10 @@
             "name": "Launch Program",
             "program": "${workspaceRoot}/bin/www",
             "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "/home/patrice/.nvm/versions/node/v7.3.0/bin/node"
+            "runtimeExecutable": "/home/patrice/.nvm/versions/node/v7.3.0/bin/node",
+            "env": {
+                "NODE_ENV": "production"
+            }
         },
         {
             "type": "node",

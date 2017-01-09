@@ -36,14 +36,14 @@ if(!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 	var compiler = webpack(webpackConfig)
 
 	app.use(webpackMiddleware(compiler,  {
-		path: "/",
-		publicPath: "/dist/",
+		path: webpackConfig.output.path,
+		publicPath: webpackConfig.output.publicPath,
 		stats: {colors: true},
 		lazy: false,
 		quiet: false,
 		watchOptions: {
         	aggregateTimeout: 300,
-        	poll: true
+        	poll: true,
     	}
 	}));
 

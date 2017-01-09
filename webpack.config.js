@@ -2,14 +2,48 @@ var path = require('path')
 var webpack = require('webpack')
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-console.log("building output in: " + __dirname + '/dist');
+var env = process.env.NODE_ENV
+
+var entry = {}, plugins = [];
+
+console.log("loading env: " + env || "none");
+
+if(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    entry = ['./src/main.js', 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000'];
+    plugins = [
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin()
+    ]
+} else if(process.env.NODE_ENV === "production") {
+    entry = './src/main.js';
+    plugins = [
+        new webpack.DefinePlugin({
+            'process.env': {
+            NODE_ENV: '"production"'
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            sourceMap: true,
+            compress: {
+            warnings: false
+            }
+        }),
+        new webpack.LoaderOptionsPlugin({
+            minimize: true
+        })
+    ]
+}
 
 module.exports = {
-    entry: ['./src/main.js', 'webpack-hot-middleware/client'],
+
+    entry: entry,
     output: {
         path: __dirname + '/dist',
-        filename: 'bundle.js'       
+        filename: 'bundle.js',
+        publicPath: '/dist'      
     },
+    watch: true,
     module: {  
         loaders: [
             { test: /\.css$/, loader: "style-loader!css-loader" },
@@ -52,10 +86,8 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map',
-    plugins: [
-        new webpack.HotModuleReplacementPlugin()      
-    ]     
+    devtool: '#source-map',
+    plugins: plugins     
 }
 
 if (process.env.NODE_ENV === 'production') {
