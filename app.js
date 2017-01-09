@@ -26,6 +26,25 @@ app.use("/public", express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
+if(!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+	var webpackMiddleware = require("webpack-dev-middleware");
+	var webpackHotMiddleware = require("webpack-hot-middleware");
+
+	var webpack = require("webpack");
+	var webpackConfig = require('./webpack.config');
+
+	var compiler = webpack(webpackConfig)
+
+	app.use(webpackMiddleware(compiler,  {
+		publicPath: webpackConfig.output.publicPath,
+		stats: {colors: true}
+	}));
+
+	app.use(webpackHotMiddleware(compiler, {
+    	log: console.log
+	}));
+}
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
