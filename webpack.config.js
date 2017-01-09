@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-var ExtractTextPlugin = require("extract-text-webpack-plugin")
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: './src/main.js',
@@ -8,12 +8,9 @@ module.exports = {
     path: './dist',
     filename: 'bundle.js'
     },
-    plugins: [
-        new ExtractTextPlugin({ filename: './dist/bundle.css', allChunks: true })
-    ], 
     module: {  
         loaders: [
-            { test: /\.scss$/, loaders: ["style", "css", "sass"] }
+            { test: /\.css$/, loader: "style-loader!css-loader" },
         ],
         rules: [            
             {
@@ -56,7 +53,9 @@ module.exports = {
     performance: {
         hints: false
     },
-    devtool: '#eval-source-map'     
+    devtool: '#eval-source-map',
+    plugins: [      
+    ]     
 }
 
 if (process.env.NODE_ENV === 'production') {

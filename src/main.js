@@ -1,5 +1,3 @@
-require("./sass/common.scss");
-
 import Vue from 'vue'
 import App from './App.vue'
 
