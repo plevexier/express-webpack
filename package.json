@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "postInstall": "webpack --progress --hide-modules",
-    "build": "NODE_ENV=production webpack"
+    "start": "node bin/www",
+    "postinstall": "webpack"  
   },
   "dependencies": {
     "axios": "^0.15.3",
